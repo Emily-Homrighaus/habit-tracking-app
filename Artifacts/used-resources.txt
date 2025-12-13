@@ -1,0 +1,3 @@
+https://www.w3schools.com (HTTP and Javascript tutorials)
+https://www.geeksforgeeks.org/node-js/express-js/
+https://www.mongodb.com/resources/languages/mern-stack-tutorial
