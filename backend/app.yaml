@@ -1,0 +1,6 @@
+runtime: nodejs22
+entrypoint: node app.js
+
+env_variables:
+  NODE_ENV: "production"
+  ATLAS_URI: "mongodb+srv://joeyh2731_db_user:byReCHYkVHSEHaQP@habitdatacluster.fbhqsc3.mongodb.net/""
