@@ -6,7 +6,8 @@ plugins: [react()],
 server: {
 host: '0.0.0.0',
 proxy: {
-    '/record': 'http://localhost:5050'
+    '/record': 'http://localhost:5050',
+    '/login': 'http://localhost:5050'
 }
 }
 })

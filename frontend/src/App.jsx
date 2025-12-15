@@ -1,12 +1,70 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import {
+  ClerkProvider,
+  SignedIn,
+  SignedOut,
+  UserButton,
+  RedirectToSignIn,
+  useAuth,
+} from '@clerk/clerk-react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
-const App = () => {
+const clerkPubKey = process.env.REACT_APP_CLERK_PUBLISHABLE_KEY
+const serverUrl = process.env.REACT_APP_SERVER_URL
+
+const Dashboard = () => {
+  const [posts, setPosts] = useState([])
+  const { getToken } = useAuth()
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const token = await getToken()
+        console.log('token: ', token)
+        // Get posts from server
+        const {
+          data: { posts },
+        } = await axios.get(`/login/user/posts`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        setPosts(posts)
+      } catch (err) {
+        console.error(err)
+      }
+    })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
-    <div className="w-full p-6">
-      <Navbar />
-      <Outlet />
-    </div>
-  );
-};
+    <>
+      <h3>Dashboard</h3>
+      <UserButton />
+      <div className="w-full p-6">
+        <Navbar />
+        <Outlet />
+      </div>
+    </>
+  )
+}
+
+function App() {
+  return (
+    // Don't forget to pass the publishableKey prop
+    <ClerkProvider publishableKey={"pk_test_c3VwcmVtZS1saW9uZXNzLTk1LmNsZXJrLmFjY291bnRzLmRldiQ"}>
+      <div className="App">
+        <header className="App-header">
+          <SignedIn>
+            <Dashboard />
+          </SignedIn>
+          <SignedOut>
+            <RedirectToSignIn />
+          </SignedOut>
+        </header>
+      </div>
+    </ClerkProvider>
+  )
+}
+
 export default App
